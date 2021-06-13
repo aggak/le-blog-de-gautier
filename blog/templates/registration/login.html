@@ -1,0 +1,25 @@
+{% extends 'blog/base.html' %}
+{% block title %}Login{% endblock %}
+{% block content1 %}
+	{% if form.errors %}
+		<h3>Veuillez bien remplir les champs</h3>
+	{% endif %}
+	<form method="POST" action="{% url 'login' %}">{% csrf_token %}
+		<table>
+			<tr>
+				<td>{{form.username.label_tag}}</td>
+				<td>{{form.username}}</td>
+			</tr>
+			<br/>
+			<tr>
+				<td><br/>{{form.password.label_tag}}</td>
+				<td><br/>{{form.password}}</td>
+			</tr>
+			<br/>
+		</table>
+		<input type="submit" value="login" />
+		<input type="hidden" name="next" value="{{next}}" />
+	</form>
+		
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+{% block title %}Accueil{% endblock %}
+{% block content1 %}
+	<h1>Liste des articles</h1>
+	{% for post in posts %}
+		<h2><a href="{% url 'detail_article' pk=post.pk %}" >{{post.title}}</a></h2>
+		<h6>Publié le {{post.published_date}}</h6>
+		<h4>{{post.text|truncatechars:200}}<a href="{% url 'detail_article' pk=post.pk %}" > Lire la suite</a></h4>
+		<h5>{{post.comptage.count}} Commentaires</h5>
+		
+	{% empty %}
+		<h3>Il n'y a aucun article</h3>
+	{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'blog/base.html' %}
+{% block title %}article {{post.pk}}{% endblock %}
+
+{% block content0 %}
+	{% if user.is_authenticated %}
+		<button><a href="{% url 'modifier_article' pk=post.pk %}">Modifier cet article</a></button>
+		<button><a href="{% url 'supprimer_article' pk=post.pk %}">Supprimer cet article</a></button>		
+		{% if not post.published_date %}
+			<button><a href="{% url 'publish' pk=post.pk %}">Publier</a></button>	
+		{% endif %}
+	{% endif %}
+{% endblock %}
+
+{% block content1 %}
+	<h1>{{post.title}}</h1>
+	<h6>Publié le {{post.published_date}}</h6>
+	<hr/>
+	<h4>{{post.text|linebreaksbr}}</h4>
+	<hr/>
+	{% for commentaire in post.comments.all %}
+		{% if user.is_authenticated or commentaire.approved %}
+			{% if not commentaire.approved %}
+				<button><a href="{% url 'approuver_commentaire' pk=commentaire.pk %}">Approuver commentaire</a></button>		
+				<button><a href="{% url 'supprimer_commentaire' pk=commentaire.pk %}">Supprimer commentaire</a></button>						
+			{% endif %}
+			<h3>{{commentaire.author}} a écrit le {{commentaire.created_date}} :</h3>
+			<h4>{{commentaire.text}}</h4>
+			<hr/>
+		{% endif %}
+		
+	{% empty %}
+		<h3>Aucun commentaire</h3>
+	{% endfor %}
+	
+	<form method="POST">{% csrf_token %}
+		{{form.as_p}}
+		<input type="submit" value="Enregistrer" />
+	</form>
+{% endblock %}
